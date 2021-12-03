@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="librerias">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/librerias/mp3spi1.9.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/librerias/basicplayer-3.0.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/librerias/tritonus-share-0.3.7.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/librerias/jlayer-1.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/librerias/slf4j-api-1.7.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/librerias/junit-4.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/librerias/mp3spi-1.9.5.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/librerias/hamcrest-core-1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/librerias/jlayer-1.0.1.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
