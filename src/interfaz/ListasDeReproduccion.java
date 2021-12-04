@@ -164,7 +164,7 @@ public class ListasDeReproduccion extends javax.swing.JFrame {
             lrep = listasDeReproduccion.get(i);
             if(lrep.getNombreLista().equals(listas.getSelectedItem().toString())){
                 if(lrep.getSize() != 0){
-                    ReproductorListaDeReproduccion r = new ReproductorListaDeReproduccion(lrep);
+                    ReproductorListaDeReproduccion r = new ReproductorListaDeReproduccion(listas.getSelectedItem().toString(), this.listasDeReproduccion);
                     r.setVisible(true);
                     this.dispose();
                 }else{

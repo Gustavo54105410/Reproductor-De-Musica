@@ -1,5 +1,10 @@
 package interfaz;
 
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.beans.*;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,24 +16,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javazoom.jlgui.basicplayer.*;
 import reproductor.Cancion;
 import reproductor.CancionArbolAVL;
 import reproductor.ListaDeCanciones;
 import reproductor.NodoCancionArbolAVL;
+import java.util.Random;
 
-public class Principal extends javax.swing.JFrame {
+public class Principal extends javax.swing.JFrame{
 
     public Principal(ListaDeCanciones lc) {
         modeloListaCanciones = new DefaultListModel();
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        
+        progressBar = new JProgressBar(0, 100);
+        progressBar.setValue(0);
+        progressBar.setStringPainted(true);
         
         System.out.println("-------PRINCIPAL---------");
         player = new BasicPlayer();
@@ -51,11 +57,12 @@ public class Principal extends javax.swing.JFrame {
                 br = new BufferedReader(new FileReader(file));
                 while((linea = br.readLine()) != null){
                      if(lc == null){
-                        modeloListaCanciones.addElement(linea);
+                         cont++;
+                        modeloListaCanciones.addElement(cont + "." + linea);
                         this.lc.añadirCancion(linea);
                         
-                        cont++;
-                        nodoArbol = new NodoCancionArbolAVL(cont);
+                        
+                        //nodoArbol = new NodoCancionArbolAVL(cont);
                         arbol.Insertar(cont);
                      }else{
                         String aux = lc.recorrerLista();
@@ -78,7 +85,7 @@ public class Principal extends javax.swing.JFrame {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        botonAgregar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -105,8 +112,8 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Agregar Canción");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        botonAgregar.setText("Agregar Canción");
+        botonAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonAgregarCancion(evt);
             }
@@ -133,7 +140,7 @@ public class Principal extends javax.swing.JFrame {
                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(12, 12, 12)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(botonAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(154, 154, 154))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -142,10 +149,10 @@ public class Principal extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(37, Short.MAX_VALUE)
+                .addContainerGap(55, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(botonAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(63, 63, 63))
@@ -287,7 +294,7 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jButton9)
                 .addGap(18, 18, 18)
                 .addComponent(jButton10)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Buscar", jPanel3);
@@ -300,12 +307,12 @@ public class Principal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void botonModificarDatos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarDatos
         this.dispose();
         modificarDatosCancion m = new modificarDatosCancion(listaCanciones.getSelectedValue(), lc);
@@ -378,7 +385,7 @@ public class Principal extends javax.swing.JFrame {
         nombre = archivo.getName(archivo.getSelectedFile()).replace(".mp3", "");
         modeloListaCanciones.addElement(nombre);
         //System.out.println(nombre);
-
+        
         int contador = 0;
 
         try {
@@ -434,8 +441,9 @@ public class Principal extends javax.swing.JFrame {
 
         JOptionPane.showMessageDialog(rootPane, "CANCIÓN AGREGADA CON EXITO");
     }//GEN-LAST:event_botonAgregarCancion
-
+  
     public void reproducir(String cancionAReproducir){
+        int cont = 0;
         System.out.println("CAnción Actual: " + cancionActual);
         if(listaCanciones.getSelectedIndex() != -1){
             try{
@@ -449,7 +457,7 @@ public class Principal extends javax.swing.JFrame {
             }
  
             if(cancionAReproducir == null){
-                aux = lc.buscarCancion(listaCanciones.getSelectedValue()).getNombre();
+                aux = lc.buscarCancion(listaCanciones.getSelectedValue().substring(3)).getNombre();
             }else{
                 aux = cancionAReproducir;
             }
@@ -477,7 +485,18 @@ public class Principal extends javax.swing.JFrame {
     }
     
     private void mostrarDatosCancion(){
-        String cancion = listaCanciones.getSelectedValue();
+        int start;
+        
+        //for (int i = 0; i < lc.getSize(); i++) {
+           try{
+               int num = Integer.parseInt(listaCanciones.getSelectedValue().substring(0, 2));
+               start = 3;
+           } catch(NumberFormatException e){
+               start = 2;
+           }
+        //}
+            
+        String cancion = listaCanciones.getSelectedValue().substring(start);
         Cancion cancion2 = lc.buscarCancion(cancion);
         
         tituloCancion.setText("Titulo: " + cancion2.getNombre());
@@ -539,18 +558,21 @@ public class Principal extends javax.swing.JFrame {
     public BasicPlayer player;
     //ArrayList<ListaReproduccion> listasDeReproduccion;
     String nombre;
+    boolean done;
     String nombreLista;
     String linea, cancionActual = "";
     ListaDeCanciones lc;
     //ListaReproduccion lrep;
     String aux;
+    Task task;
     NodoCancionArbolAVL nodoArbol;
     CancionArbolAVL arbol;
+    JProgressBar progressBar;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel albumCancion;
     private javax.swing.JLabel artistaCancion;
+    private javax.swing.JButton botonAgregar;
     private javax.swing.JLabel generoCancion;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -574,4 +596,36 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JList<String> listaCanciones;
     private javax.swing.JLabel tituloCancion;
     // End of variables declaration//GEN-END:variables
+
+class Task extends SwingWorker<Void, Void> {
+        /*
+         * Main task. Executed in background thread.
+         */
+        @Override
+        public Void doInBackground() {
+            Random random = new Random();
+            int progress = 0;
+            //Initialize progress property.
+            setProgress(0);
+            while (progress < 100) {
+                //Sleep for up to one second.
+                try {
+                    Thread.sleep(random.nextInt(1000));
+                } catch (InterruptedException ignore) {}
+                //Make random progress.
+                progress += random.nextInt(10);
+                setProgress(Math.min(progress, 100));
+            }
+            return null;
+        }
+        
+        @Override
+        public void done() {
+            Toolkit.getDefaultToolkit().beep();
+            botonAgregar.setEnabled(true);
+            setCursor(null); //turn off the wait cursor
+            //taskOutput.append("Done!\n");
+        }
+}
+
 }
