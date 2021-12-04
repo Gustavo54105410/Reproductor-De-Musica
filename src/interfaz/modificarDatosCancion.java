@@ -6,6 +6,9 @@
 package interfaz;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import reproductor.Cancion;
+import reproductor.ListaDeCanciones;
 import reproductor.ListaDeReproduccion;
 
 /**
@@ -17,17 +20,18 @@ public class modificarDatosCancion extends javax.swing.JFrame {
     /**
      * Creates new form modificarDatosCancion
      */
-    public modificarDatosCancion(String nombreLista, ArrayList<ListaDeReproduccion> listaDeReproduccion) {
+    public modificarDatosCancion(String nombreCancion, ListaDeCanciones listaDeCanciones) {
         initComponents();
-        
-        this.listasDeReproduccion = new ArrayList<>();
-        this.listasDeReproduccion = listaDeReproduccion;
-        for(int i = 0; i < this.listasDeReproduccion.size(); i++){
-            lrep = this.listasDeReproduccion.get(i);
-            if(nombreLista.equals(lrep.getNombreLista())){
-                break;
-            }
+        setResizable(false);
+        this.setLocationRelativeTo(null);
+        if(listaDeCanciones == null){
+            System.out.println("es nulo");
+        }else{
+            System.out.println("no es nulo");
         }
+        //listaDeCanciones = new ListaDeCanciones();
+        this.listaDeCanciones = listaDeCanciones;
+        this.nombreCancion = nombreCancion;
     }
 
     /**
@@ -40,11 +44,11 @@ public class modificarDatosCancion extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        textTitulo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        textArtista = new javax.swing.JTextField();
+        textAlbum = new javax.swing.JTextField();
+        textGenero = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -93,10 +97,10 @@ public class modificarDatosCancion extends javax.swing.JFrame {
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
-                            .addComponent(jTextField3)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2)))
+                            .addComponent(textGenero, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                            .addComponent(textAlbum)
+                            .addComponent(textTitulo)
+                            .addComponent(textArtista)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(73, 73, 73)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -110,18 +114,18 @@ public class modificarDatosCancion extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textArtista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(textAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(textGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -135,15 +139,42 @@ public class modificarDatosCancion extends javax.swing.JFrame {
 
     private void botonCancelar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelar
         this.dispose();
+        Principal p = new Principal(null);
+        p.setVisible(true);
     }//GEN-LAST:event_botonCancelar
 
     private void botonAceptar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptar
-        
+        if(!textTitulo.getText().equals("") && !textArtista.getText().equals("") && !textAlbum.getText().equals("") && !textGenero.getText().equals("")){
+            String cancionAux;
+            do{
+                cancionAux = listaDeCanciones.recorrerLista();
+                System.out.println("cancionAux: "  + cancionAux);
+                if(cancionAux != null){
+                    if(nombreCancion.equals(cancionAux)){
+                        System.out.println("CAMBIANDO CANCION");
+                        cancion = listaDeCanciones.buscarCancion(cancionAux);
+                        System.out.println("Cancion cambiando : " + cancion.getNombre());
+                        cancion.setNombre(textTitulo.getText());
+                        cancion.setArtista(textArtista.getText());
+                        cancion.setAlbum(textAlbum.getText());
+                        cancion.setGenero(textGenero.getText());
+                    }
+                }else{
+                    break;
+                }
+            }while(cancionAux != null);
+            
+            Principal p = new Principal(this.listaDeCanciones);
+            p.setVisible(true);
+            this.dispose();
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "DEBES LLENAR PRIMERO LOS RECUADROS");
+        }
     }//GEN-LAST:event_botonAceptar
 
-    ArrayList<ListaDeReproduccion> listasDeReproduccion;
-    ListaDeReproduccion lrep;
-    
+    ListaDeCanciones listaDeCanciones;
+    String nombreCancion;
+    Cancion cancion;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -151,9 +182,9 @@ public class modificarDatosCancion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField textAlbum;
+    private javax.swing.JTextField textArtista;
+    private javax.swing.JTextField textGenero;
+    private javax.swing.JTextField textTitulo;
     // End of variables declaration//GEN-END:variables
 }

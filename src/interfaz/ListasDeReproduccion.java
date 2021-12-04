@@ -20,13 +20,14 @@ public class ListasDeReproduccion extends javax.swing.JFrame {
     /**
      * Creates new form ListasDeReproduccion
      */
-    public ListasDeReproduccion(ArrayList<ListaDeReproduccion> listasDeReproduccion) {
+    public ListasDeReproduccion(ArrayList<ListaDeReproduccion> listasDeReproduccion, ListaDeCanciones listaDeCanciones) {
         modeloListas = new DefaultComboBoxModel<>();
         
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         
+        this.listaDeCanciones = listaDeCanciones;
         System.out.println("--------------" + listasDeReproduccion);
         if(listasDeReproduccion == null){
             this.listasDeReproduccion = new ArrayList<>();
@@ -172,7 +173,7 @@ public class ListasDeReproduccion extends javax.swing.JFrame {
             }
 
 
-            EditarLista el = new EditarLista(tituloLista, listasDeReproduccion);
+            EditarLista el = new EditarLista(tituloLista, listasDeReproduccion, listaDeCanciones);
             el.setVisible(true);
             this.setVisible(false);
         }
@@ -187,6 +188,7 @@ public class ListasDeReproduccion extends javax.swing.JFrame {
     ListaDeReproduccion lrep;
     public ArrayList<ListaDeReproduccion> listasDeReproduccion;
     private String tituloLista;
+    ListaDeCanciones listaDeCanciones;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

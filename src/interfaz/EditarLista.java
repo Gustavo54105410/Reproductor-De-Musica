@@ -13,7 +13,7 @@ import reproductor.ListaDeReproduccion;
 
 public class EditarLista extends javax.swing.JFrame {
 
-    public EditarLista(String nombreLista, ArrayList<ListaDeReproduccion> listasDeReproduccion) {
+    public EditarLista(String nombreLista, ArrayList<ListaDeReproduccion> listasDeReproduccion, ListaDeCanciones listaDeCanciones) {
         modeloMisCanciones = new DefaultListModel();
         modeloMiListaDeReproduccion = new DefaultListModel();
         initComponents();
@@ -23,16 +23,29 @@ public class EditarLista extends javax.swing.JFrame {
         this.tituloLista = nombreLista;
         titulo.setText("Mi lista:" + nombreLista);
         lc = new ListaDeCanciones();
+        //this.lc = listaDeCanciones;
+        //lc.listaTotal();
+        
+        int cont = 0;
+        
         BufferedReader br;
         try {
             File file = new File("src/ficheros/Lista De Canciones.txt");
             if(file.exists()){
                 br = new BufferedReader(new FileReader(file));
                 while((linea = br.readLine()) != null){
+                    cont++;
                      modeloMisCanciones.addElement(linea);
                      lc.añadirCancion(linea);
                 }
             }
+            /*
+            String aux;
+            do{
+                aux = lc.recorrerLista();
+                System.out.println("AÑADIENDO AL OTRO: " + aux);
+                modeloMisCanciones.addElement(aux);
+            }while(aux != null);*/
         } catch (Exception ex) {
                 Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -147,8 +160,8 @@ public class EditarLista extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jButton4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -193,7 +206,7 @@ public class EditarLista extends javax.swing.JFrame {
     }//GEN-LAST:event_botonQuitarSeleccion1
 
     private void botonRegresar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRegresar
-        ListasDeReproduccion l = new ListasDeReproduccion(this.listasDeReproduccion);
+        ListasDeReproduccion l = new ListasDeReproduccion(this.listasDeReproduccion, null);
         l.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_botonRegresar

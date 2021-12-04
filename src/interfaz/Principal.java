@@ -18,26 +18,53 @@ import javax.swing.ListSelectionModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javazoom.jlgui.basicplayer.*;
 import reproductor.Cancion;
+import reproductor.CancionArbolAVL;
 import reproductor.ListaDeCanciones;
+import reproductor.NodoCancionArbolAVL;
 
 public class Principal extends javax.swing.JFrame {
 
-    public Principal() {
+    public Principal(ListaDeCanciones lc) {
         modeloListaCanciones = new DefaultListModel();
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         
+        System.out.println("-------PRINCIPAL---------");
         player = new BasicPlayer();
-        lc = new ListaDeCanciones();
+        
+        if(lc == null){
+            this.lc = new ListaDeCanciones();
+        }else{
+            this.lc = new ListaDeCanciones();
+            this.lc = lc;
+            //lc.listaTotal();
+        }
+        
+        int cont = 0;
+        arbol = new CancionArbolAVL();
+        
         BufferedReader br;
         try {
             File file = new File("src/ficheros/Lista De Canciones.txt");
             if(file.exists()){
                 br = new BufferedReader(new FileReader(file));
                 while((linea = br.readLine()) != null){
-                     modeloListaCanciones.addElement(linea);
-                     lc.añadirCancion(linea);
+                     if(lc == null){
+                        modeloListaCanciones.addElement(linea);
+                        this.lc.añadirCancion(linea);
+                        
+                        cont++;
+                        nodoArbol = new NodoCancionArbolAVL(cont);
+                        arbol.Insertar(cont);
+                     }else{
+                        String aux = lc.recorrerLista();
+                        modeloListaCanciones.addElement(aux);
+                        //this.lc.añadirCancion(aux);
+                        
+                        cont++;
+                        nodoArbol = new NodoCancionArbolAVL(cont);
+                     }
                 }
             }
         } catch (Exception ex) {
@@ -161,6 +188,11 @@ public class Principal extends javax.swing.JFrame {
         generoCancion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         jButton7.setText("Modificar Datos");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonModificarDatos(evt);
+            }
+        });
 
         jButton8.setText("jButton8");
 
@@ -373,10 +405,17 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_listaCancionesMouseClicked
 
     private void botonIrAListasDeReproduccion(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIrAListasDeReproduccion
-        ListasDeReproduccion lr = new ListasDeReproduccion(null);
+        ListasDeReproduccion lr = new ListasDeReproduccion(null, this.lc);
         lr.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_botonIrAListasDeReproduccion
+
+    private void botonModificarDatos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarDatos
+        this.dispose();
+        modificarDatosCancion m = new modificarDatosCancion(listaCanciones.getSelectedValue(), lc);
+        m.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_botonModificarDatos
 
     public void reproducir(String cancionAReproducir){
         System.out.println("CAnción Actual: " + cancionActual);
@@ -471,7 +510,7 @@ public class Principal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Principal().setVisible(true);
+                new Principal(null).setVisible(true);
             }
         });
     }
@@ -487,6 +526,8 @@ public class Principal extends javax.swing.JFrame {
     ListaDeCanciones lc;
     //ListaReproduccion lrep;
     String aux;
+    NodoCancionArbolAVL nodoArbol;
+    CancionArbolAVL arbol;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel albumCancion;
     private javax.swing.JLabel artistaCancion;

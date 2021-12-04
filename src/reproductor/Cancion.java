@@ -5,6 +5,7 @@ public class Cancion {
     private String genero;
     private String album;
     private String artista;
+    private int id;
 
     public Cancion(String nombre){
         this.nombre = nombre;
@@ -41,4 +42,13 @@ public class Cancion {
     public void setArtista(String artista) {
         this.artista = artista;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
 }
