@@ -28,6 +28,10 @@ public class ListaDeReproduccion {
         this.nombreLista = nombreLista;
     }
     
+    public ListaDeCanciones getCola(){
+        return cola;
+    }
+    
     public int getSize(){
         return cola.getSize();
     }
