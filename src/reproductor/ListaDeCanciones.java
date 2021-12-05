@@ -59,6 +59,22 @@ public class ListaDeCanciones {
         return nodoAux.getDato();
     }
     
+    public Cancion buscarAleatoria(int dato){
+        nodoAux = nodoInicial;
+        
+        do{
+            if(nodoAux != null){
+                if(nodoAux.getDato().getId() == dato){
+                    System.out.println(nodoAux.getDato().getNombre());
+                    return nodoAux.getDato();
+                }
+                nodoAux = nodoAux.getSiguiente();
+            }
+        }while(nodoAux != null);
+        
+        return nodoAux.getDato();
+    }
+    
     public String recorrerLista(){
         
         cont++;

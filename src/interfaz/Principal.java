@@ -13,7 +13,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.MathContext;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -22,60 +24,59 @@ import reproductor.Cancion;
 import reproductor.CancionArbolAVL;
 import reproductor.ListaDeCanciones;
 import reproductor.NodoCancionArbolAVL;
-import java.util.Random;
 
-public class Principal extends javax.swing.JFrame{
+public class Principal extends javax.swing.JFrame {
 
     public Principal(ListaDeCanciones lc) {
         modeloListaCanciones = new DefaultListModel();
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-        
+
         progressBar = new JProgressBar(0, 100);
         progressBar.setValue(0);
         progressBar.setStringPainted(true);
-        
+
         System.out.println("-------PRINCIPAL---------");
         player = new BasicPlayer();
-        
-        if(lc == null){
+
+        if (lc == null) {
             this.lc = new ListaDeCanciones();
-        }else{
+        } else {
             this.lc = new ListaDeCanciones();
             this.lc = lc;
             //lc.listaTotal();
         }
-        
+
         int cont = 0;
         arbol = new CancionArbolAVL();
-        
+
         BufferedReader br;
         try {
             File file = new File("src/ficheros/Lista De Canciones.txt");
-            if(file.exists()){
+            if (file.exists()) {
                 br = new BufferedReader(new FileReader(file));
-                while((linea = br.readLine()) != null){
-                     if(lc == null){
-                         cont++;
+                while ((linea = br.readLine()) != null) {
+                    if (lc == null) {
+                        cont++;
                         modeloListaCanciones.addElement(cont + "." + linea);
                         this.lc.añadirCancion(linea);
-                        
-                        
+                        Cancion cancion = this.lc.buscarCancion(linea);
+                        cancion.setId(cont);
                         //nodoArbol = new NodoCancionArbolAVL(cont);
                         arbol.Insertar(cont);
-                     }else{
+                    } else {
                         String aux = lc.recorrerLista();
                         modeloListaCanciones.addElement(aux);
                         //this.lc.añadirCancion(aux);
-                        
+
                         cont++;
                         nodoArbol = new NodoCancionArbolAVL(cont);
-                     }
+                    }
                 }
             }
         } catch (Exception ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -233,6 +234,11 @@ public class Principal extends javax.swing.JFrame{
         jPanel2.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 430, 135, -1));
 
         jButton8.setText("jButton8");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAleatorio(evt);
+            }
+        });
         jPanel2.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 200, 39, 39));
 
         jTabbedPane1.addTab("Canciones", jPanel2);
@@ -312,7 +318,7 @@ public class Principal extends javax.swing.JFrame{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     private void botonModificarDatos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarDatos
         this.dispose();
         modificarDatosCancion m = new modificarDatosCancion(listaCanciones.getSelectedValue(), lc);
@@ -330,13 +336,13 @@ public class Principal extends javax.swing.JFrame{
 
     private void botonAvanzar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAvanzar
         listaCanciones.setSelectedIndex(listaCanciones.getSelectedIndex() + 1);
-        if(listaCanciones.getSelectedIndex() != -1){
+        if (listaCanciones.getSelectedIndex() != -1) {
             //System.out.println("DEVUELVE: " + lc.avanzar());
             String x = lc.avanzar();
-            if(!x.equals("final")){
+            if (!x.equals("final")) {
                 System.out.println(x);
                 reproducir(x);
-            }else{
+            } else {
                 System.out.println("Ya no hay canciones delante");
             }
         }
@@ -350,13 +356,13 @@ public class Principal extends javax.swing.JFrame{
 
     private void botonRetroceder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRetroceder
         listaCanciones.setSelectedIndex(listaCanciones.getSelectedIndex() - 1);
-        if(listaCanciones.getSelectedIndex() != -1){
+        if (listaCanciones.getSelectedIndex() != -1) {
             //System.out.println("DEVUELVE: " + lc.retroceder());
             String x = lc.retroceder();
-            if(!x.equals("inicial")){
+            if (!x.equals("inicial")) {
                 System.out.println(x);
                 reproducir(x);
-            }else{
+            } else {
                 System.out.println("Ya no hay canciones atras");
             }
         }
@@ -385,15 +391,15 @@ public class Principal extends javax.swing.JFrame{
         nombre = archivo.getName(archivo.getSelectedFile()).replace(".mp3", "");
         modeloListaCanciones.addElement(nombre);
         //System.out.println(nombre);
-        
+
         int contador = 0;
 
         try {
             FileInputStream fis = new FileInputStream(file);
-            while(true){
+            while (true) {
                 int byteEntrada = fis.read();
                 contador++;
-                if(byteEntrada == -1){
+                if (byteEntrada == -1) {
                     break;
                 }
             }
@@ -409,13 +415,13 @@ public class Principal extends javax.swing.JFrame{
         try {
             FileInputStream fis = new FileInputStream(file);
             BufferedWriter bw = new BufferedWriter(new FileWriter("src/ficheros/Lista De Canciones.txt", true));
-            while(true){
+            while (true) {
                 int byteEntrada = fis.read();
-                if(byteEntrada != -1){
+                if (byteEntrada != -1) {
                     bytes[contador] = byteEntrada;
                 }
                 contador++;
-                if(byteEntrada == -1){
+                if (byteEntrada == -1) {
                     break;
                 }
             }
@@ -441,14 +447,62 @@ public class Principal extends javax.swing.JFrame{
 
         JOptionPane.showMessageDialog(rootPane, "CANCIÓN AGREGADA CON EXITO");
     }//GEN-LAST:event_botonAgregarCancion
-  
-    public void reproducir(String cancionAReproducir){
+
+    private void botonAleatorio(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAleatorio
+        Random r = new Random();
+        int aleatorios[] = new int[lc.getSize()];
+        
+        while(true){
+           int random = r.nextInt(lc.getSize() + 1); 
+           if(aleatorios[lc.getSize()-1] == 0){
+                if(random != 0){
+                     for (int i = 0; i < lc.getSize(); i++) {
+                         if(random == aleatorios[i]){
+                             break;
+                         }
+                         if(aleatorios[i] == 0){
+                             aleatorios[i] = random;
+                             break;
+                         }
+                     }
+                }
+           }else{
+               break;
+           }
+        }
+        
+        for (int i = 0; i < lc.getSize(); i++) {
+            System.out.print(aleatorios[i] + " ");
+        }
+        
+        modeloListaCanciones.clear();
+        
         int cont = 0;
+        
+        for (int i = 0; i < aleatorios.length; i++) {
+            cont++;
+            Cancion cancion = lc.buscarAleatoria(aleatorios[i]);
+            modeloListaCanciones.addElement(cont + "." + cancion.getNombre());
+        }
+        
+    }//GEN-LAST:event_botonAleatorio
+
+    public void reproducir(String cancionAReproducir){
+        
+        int start;
+
+        try {
+            int num = Integer.parseInt(listaCanciones.getSelectedValue().substring(0, 2));
+            start = 3;
+        } catch (NumberFormatException e) {
+            start = 2;
+        }
+        
         System.out.println("CAnción Actual: " + cancionActual);
         if(listaCanciones.getSelectedIndex() != -1){
             try{
                 
-                if(!cancionActual.equals(listaCanciones.getSelectedValue())){
+                if(!cancionActual.equals(listaCanciones.getSelectedValue().substring(start))){
                     player.stop();
                     System.out.println("STOP");
                 }
@@ -457,7 +511,7 @@ public class Principal extends javax.swing.JFrame{
             }
  
             if(cancionAReproducir == null){
-                aux = lc.buscarCancion(listaCanciones.getSelectedValue().substring(3)).getNombre();
+                aux = lc.buscarCancion(listaCanciones.getSelectedValue().substring(start)).getNombre();
             }else{
                 aux = cancionAReproducir;
             }
@@ -465,7 +519,7 @@ public class Principal extends javax.swing.JFrame{
             try{          
                 System.out.println("Cancion antes de play: " + cancionActual);
 
-                if(player.getStatus() == BasicPlayer.PLAYING && cancionActual.equals(listaCanciones.getSelectedValue())){
+                if(player.getStatus() == BasicPlayer.PLAYING && cancionActual.equals(listaCanciones.getSelectedValue().substring(start))){
                     player.pause();
                     System.out.println("PAUSADA");
                 }else if(player.getStatus() != BasicPlayer.PLAYING && player.getStatus() != BasicPlayer.PAUSED){
@@ -483,43 +537,41 @@ public class Principal extends javax.swing.JFrame{
             }
         }
     }
-    
-    private void mostrarDatosCancion(){
+
+    private void mostrarDatosCancion() {
         int start;
-        
-        //for (int i = 0; i < lc.getSize(); i++) {
-           try{
-               int num = Integer.parseInt(listaCanciones.getSelectedValue().substring(0, 2));
-               start = 3;
-           } catch(NumberFormatException e){
-               start = 2;
-           }
-        //}
-            
+
+        try {
+            int num = Integer.parseInt(listaCanciones.getSelectedValue().substring(0, 2));
+            start = 3;
+        } catch (NumberFormatException e) {
+            start = 2;
+        }
+
         String cancion = listaCanciones.getSelectedValue().substring(start);
         Cancion cancion2 = lc.buscarCancion(cancion);
-        
+
         tituloCancion.setText("Titulo: " + cancion2.getNombre());
-        
-        if(cancion2.getArtista() == null){
+
+        if (cancion2.getArtista() == null) {
             artistaCancion.setText("\nArtista: Desconocido");
-        }else{
+        } else {
             artistaCancion.setText("\nArtista: " + cancion2.getArtista());
         }
-        
-        if(cancion2.getAlbum() == null){
+
+        if (cancion2.getAlbum() == null) {
             albumCancion.setText("\nÁlbum: Desconocido");
-        }else{
+        } else {
             albumCancion.setText("\nAlbúm: " + cancion2.getAlbum());
         }
-        
-        if(cancion2.getGenero() == null){
+
+        if (cancion2.getGenero() == null) {
             generoCancion.setText("\nGénero: Desconocido");
-        }else{
+        } else {
             generoCancion.setText("\nGénero: " + cancion2.getGenero());
         }
     }
-    
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -564,7 +616,6 @@ public class Principal extends javax.swing.JFrame{
     ListaDeCanciones lc;
     //ListaReproduccion lrep;
     String aux;
-    Task task;
     NodoCancionArbolAVL nodoArbol;
     CancionArbolAVL arbol;
     JProgressBar progressBar;
@@ -596,36 +647,4 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JList<String> listaCanciones;
     private javax.swing.JLabel tituloCancion;
     // End of variables declaration//GEN-END:variables
-
-class Task extends SwingWorker<Void, Void> {
-        /*
-         * Main task. Executed in background thread.
-         */
-        @Override
-        public Void doInBackground() {
-            Random random = new Random();
-            int progress = 0;
-            //Initialize progress property.
-            setProgress(0);
-            while (progress < 100) {
-                //Sleep for up to one second.
-                try {
-                    Thread.sleep(random.nextInt(1000));
-                } catch (InterruptedException ignore) {}
-                //Make random progress.
-                progress += random.nextInt(10);
-                setProgress(Math.min(progress, 100));
-            }
-            return null;
-        }
-        
-        @Override
-        public void done() {
-            Toolkit.getDefaultToolkit().beep();
-            botonAgregar.setEnabled(true);
-            setCursor(null); //turn off the wait cursor
-            //taskOutput.append("Done!\n");
-        }
-}
-
 }
