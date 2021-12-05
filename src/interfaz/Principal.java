@@ -33,10 +33,6 @@ public class Principal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
 
-        progressBar = new JProgressBar(0, 100);
-        progressBar.setValue(0);
-        progressBar.setStringPainted(true);
-
         System.out.println("-------PRINCIPAL---------");
         player = new BasicPlayer();
 
@@ -618,7 +614,6 @@ public class Principal extends javax.swing.JFrame {
     String aux;
     NodoCancionArbolAVL nodoArbol;
     CancionArbolAVL arbol;
-    JProgressBar progressBar;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel albumCancion;
     private javax.swing.JLabel artistaCancion;
