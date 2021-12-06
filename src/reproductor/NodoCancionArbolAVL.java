@@ -22,8 +22,8 @@ public class NodoCancionArbolAVL {
         this.song = song;
     }
 
-    public void setDato(int dato) {
-        this.dato = dato;
+    public void setDato() {
+        this.dato = song.getId();
     }
 
     public void setFe(int fe) {

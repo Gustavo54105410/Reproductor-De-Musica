@@ -6,6 +6,7 @@
 package interfaz;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 import reproductor.Cancion;
 import reproductor.ListaDeCanciones;
@@ -20,18 +21,24 @@ public class modificarDatosCancion extends javax.swing.JFrame {
     /**
      * Creates new form modificarDatosCancion
      */
-    public modificarDatosCancion(String nombreCancion, ListaDeCanciones listaDeCanciones) {
+    public modificarDatosCancion(Cancion cancion, int id, ListaDeCanciones listaDeCanciones) {
         initComponents();
         setResizable(false);
         this.setLocationRelativeTo(null);
-        if(listaDeCanciones == null){
+        
+        //this.numTotalLista = numTotalLista;
+        lc = listaDeCanciones;
+        /*if(listaDeCanciones == null){
             System.out.println("es nulo");
         }else{
             System.out.println("no es nulo");
-        }
-        //listaDeCanciones = new ListaDeCanciones();
-        this.listaDeCanciones = listaDeCanciones;
-        this.nombreCancion = nombreCancion;
+        }*/
+        System.out.println("Canción a modificar: " + cancion.getNombre());
+        this.cancion = cancion;
+        
+//listaDeCanciones = new ListaDeCanciones();
+        //this.listaDeCanciones = listaDeCanciones;
+        //this.nombreCancion = nombreCancion;
     }
 
     /**
@@ -55,19 +62,27 @@ public class modificarDatosCancion extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 51));
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Titulo:");
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Artista:");
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Álbum:");
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Género:");
 
+        jButton1.setBackground(new java.awt.Color(255, 153, 102));
+        jButton1.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(0, 0, 0));
         jButton1.setText("Aceptar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -75,6 +90,9 @@ public class modificarDatosCancion extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setBackground(new java.awt.Color(255, 153, 102));
+        jButton2.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(0, 0, 0));
         jButton2.setText("Cancelar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -87,26 +105,29 @@ public class modificarDatosCancion extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(15, 15, 15))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(textGenero, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
-                            .addComponent(textAlbum)
-                            .addComponent(textTitulo)
-                            .addComponent(textArtista)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(19, Short.MAX_VALUE))
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(textTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(textArtista, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(textAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(textGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,7 +152,7 @@ public class modificarDatosCancion extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -139,34 +160,33 @@ public class modificarDatosCancion extends javax.swing.JFrame {
 
     private void botonCancelar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelar
         this.dispose();
-        Principal p = new Principal(null);
+        Principal p = new Principal(null, null,this.lc);
         p.setVisible(true);
     }//GEN-LAST:event_botonCancelar
 
     private void botonAceptar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptar
         if(!textTitulo.getText().equals("") && !textArtista.getText().equals("") && !textAlbum.getText().equals("") && !textGenero.getText().equals("")){
-            String cancionAux;
-            do{
-                cancionAux = listaDeCanciones.recorrerLista();
-                System.out.println("cancionAux: "  + cancionAux);
-                if(cancionAux != null){
-                    if(nombreCancion.equals(cancionAux)){
-                        System.out.println("CAMBIANDO CANCION");
-                        cancion = listaDeCanciones.buscarCancion(cancionAux);
-                        System.out.println("Cancion cambiando : " + cancion.getNombre());
-                        cancion.setNombre(textTitulo.getText());
-                        cancion.setArtista(textArtista.getText());
-                        cancion.setAlbum(textAlbum.getText());
-                        cancion.setGenero(textGenero.getText());
-                    }
-                }else{
-                    break;
-                }
-            }while(cancionAux != null);
             
-            Principal p = new Principal(this.listaDeCanciones);
-            p.setVisible(true);
-            this.dispose();
+            Cancion c;
+            do{
+                    c = lc.recorrerLista();
+                    if(c != null){
+                        if(cancion.getNombre().equals(c.getNombre()) && cancion.getArtista().equals(c.getArtista())){
+                            c.setNombre(textTitulo.getText());
+                            c.setArtista(textArtista.getText());
+                            c.setAlbum(textAlbum.getText());
+                            c.setGenero(textGenero.getText());
+                            
+                            
+                        }
+                    }
+                }while(c != null);
+            
+            JOptionPane.showMessageDialog(rootPane, "CANCIÓN EDITADA CON EXITO");
+                            Principal p = new Principal(cancion, cancion.getId(),this.lc);
+                            p.setVisible(true);
+                            this.dispose();
+            
         }else{
             JOptionPane.showMessageDialog(rootPane, "DEBES LLENAR PRIMERO LOS RECUADROS");
         }
@@ -175,6 +195,9 @@ public class modificarDatosCancion extends javax.swing.JFrame {
     ListaDeCanciones listaDeCanciones;
     String nombreCancion;
     Cancion cancion;
+    ListaDeCanciones lc;
+    HashMap modificados[];
+    int numTotalLista;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

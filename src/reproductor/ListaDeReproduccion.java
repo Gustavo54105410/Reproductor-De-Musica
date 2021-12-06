@@ -13,10 +13,10 @@ public class ListaDeReproduccion {
      }
 
      public void añadirAListaDeReproduccion(String nombreCancion){
-         cola.añadirCancion(nombreCancion);
+         cola.añadirCancionAListaDeReproduccion(nombreCancion);
      }
      
-     public String recorrerListaDeReproduccion(){
+     public Cancion recorrerListaDeReproduccion(){
          return cola.recorrerLista();
      }
      

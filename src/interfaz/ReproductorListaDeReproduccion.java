@@ -4,12 +4,13 @@ import java.io.File;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javazoom.jlgui.basicplayer.BasicPlayer;
+import reproductor.Cancion;
 import reproductor.ListaDeCanciones;
 import reproductor.ListaDeReproduccion;
 
 public class ReproductorListaDeReproduccion extends javax.swing.JFrame {
 
-    public ReproductorListaDeReproduccion(String nombreLista, ArrayList<ListaDeReproduccion> listasDeReproduccion) {
+    public ReproductorListaDeReproduccion(String nombreLista, ArrayList<ListaDeReproduccion> listasDeReproduccion, ListaDeCanciones lc) {
         modeloListaDeReproduccion = new DefaultListModel();
         
         initComponents();
@@ -20,7 +21,7 @@ public class ReproductorListaDeReproduccion extends javax.swing.JFrame {
         
         this.listasDeReproduccion = listasDeReproduccion;
         
-        lc = new ListaDeCanciones();
+        this.lc = lc;
         
         for (int i = 0; i < listasDeReproduccion.size(); i++) {
             lrep = listasDeReproduccion.get(i);
@@ -30,10 +31,10 @@ public class ReproductorListaDeReproduccion extends javax.swing.JFrame {
         }
         
         while(true){
-            String cancion = lrep.recorrerListaDeReproduccion();
+            Cancion cancion = lrep.recorrerListaDeReproduccion();
             if(cancion != null){
-                System.out.println("+++++++++++++++" + cancion);
-                modeloListaDeReproduccion.addElement(cancion);
+                System.out.println("+++++++++++++++" + cancion.getNombre());
+                modeloListaDeReproduccion.addElement(cancion.getNombre());
             }else{
                 break;
             }
@@ -96,32 +97,38 @@ public class ReproductorListaDeReproduccion extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+
+        listaCanciones.setFont(new java.awt.Font("Kristen ITC", 1, 14)); // NOI18N
         listaCanciones.setModel(modeloListaDeReproduccion);
         jScrollPane1.setViewportView(listaCanciones);
 
-        jButton1.setText("jButton1");
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/anterior.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonRetroceder(evt);
             }
         });
 
-        jButton2.setText("jButton2");
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/play.png"))); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonReproducirYPausar(evt);
             }
         });
 
-        jButton3.setText("jButton3");
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/siguiente.png"))); // NOI18N
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonAvanzar(evt);
             }
         });
 
-        jButton4.setText("jButton4");
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/stop.png"))); // NOI18N
 
+        jButton5.setBackground(new java.awt.Color(255, 153, 102));
+        jButton5.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(0, 0, 0));
         jButton5.setText("Regresar");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -166,7 +173,7 @@ public class ReproductorListaDeReproduccion extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43))
         );
@@ -218,7 +225,7 @@ public class ReproductorListaDeReproduccion extends javax.swing.JFrame {
     }//GEN-LAST:event_botonRetroceder
 
     private void botonRegresar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRegresar
-        ListasDeReproduccion l = new ListasDeReproduccion(this.listasDeReproduccion, null);
+        ListasDeReproduccion l = new ListasDeReproduccion(this.listasDeReproduccion, this.lc);
         l.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_botonRegresar

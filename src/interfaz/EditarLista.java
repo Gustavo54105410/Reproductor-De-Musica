@@ -8,8 +8,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import reproductor.Cancion;
+import reproductor.CancionArbolAVL;
 import reproductor.ListaDeCanciones;
 import reproductor.ListaDeReproduccion;
+import reproductor.NodoCancionArbolAVL;
 
 public class EditarLista extends javax.swing.JFrame {
 
@@ -22,23 +24,31 @@ public class EditarLista extends javax.swing.JFrame {
         
         this.tituloLista = nombreLista;
         titulo.setText("Mi lista:" + nombreLista);
-        lc = new ListaDeCanciones();
+        //lc = new ListaDeCanciones();
+        this.lc = listaDeCanciones;
         //this.lc = listaDeCanciones;
-        //lc.listaTotal();
+        lc.listaTotal();
+        
+        
         
         int cont = 0;
         
         BufferedReader br;
         try {
-            File file = new File("src/ficheros/Lista De Canciones.txt");
-            if(file.exists()){
-                br = new BufferedReader(new FileReader(file));
-                while((linea = br.readLine()) != null){
+            //File file = new File("src/ficheros/Lista De Canciones.txt");
+            //if(file.exists()){
+                //br = new BufferedReader(new FileReader(file));
+                //while((linea = br.readLine()) != null){
+                Cancion cancion;
+                do{
                     cont++;
-                     modeloMisCanciones.addElement(linea);
-                     lc.añadirCancion(linea);
-                }
-            }
+                    //Cancion cancion = lc.buscarCancion(linea);
+                    cancion = lc.recorrerLista();
+                    if(cancion != null){
+                        modeloMisCanciones.addElement(cancion.getNombre());
+                    }
+                }while(cancion != null);
+            //}
             /*
             String aux;
             do{
@@ -60,10 +70,10 @@ public class EditarLista extends javax.swing.JFrame {
         }
         System.out.println("Tamaño: " + lrep.getSize());
         while(true){
-            String cancion = lrep.recorrerListaDeReproduccion();
+            Cancion cancion = lrep.recorrerListaDeReproduccion();
             if(cancion != null){
-                System.out.println("+++++++++++++++" + cancion);
-                modeloMiListaDeReproduccion.addElement(cancion);
+                System.out.println("+++++++++++++++" + cancion.getNombre());
+                modeloMiListaDeReproduccion.addElement(cancion.getNombre());
             }else{
                 break;
             }
@@ -82,11 +92,13 @@ public class EditarLista extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         titulo = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+
+        misCanciones.setFont(new java.awt.Font("Kristen ITC", 1, 14)); // NOI18N
         misCanciones.setModel(modeloMisCanciones);
         misCanciones.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -95,6 +107,7 @@ public class EditarLista extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(misCanciones);
 
+        miLista.setFont(new java.awt.Font("Kristen ITC", 1, 14)); // NOI18N
         miLista.setModel(modeloMiListaDeReproduccion);
         miLista.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -103,11 +116,18 @@ public class EditarLista extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(miLista);
 
+        jLabel1.setFont(new java.awt.Font("Kristen ITC", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("MIS CANCIONES");
 
+        titulo.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
+        titulo.setForeground(new java.awt.Color(255, 255, 255));
         titulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
+        jButton1.setBackground(new java.awt.Color(255, 153, 102));
+        jButton1.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(0, 0, 0));
         jButton1.setText("Agregar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -115,8 +135,9 @@ public class EditarLista extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Eliminar");
-
+        jButton4.setBackground(new java.awt.Color(255, 153, 102));
+        jButton4.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(0, 0, 0));
         jButton4.setText("Regresar");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -133,22 +154,17 @@ public class EditarLista extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(12, 12, 12)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                        .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(38, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(25, 25, 25))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(76, 76, 76))))))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(25, 25, 25))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -159,21 +175,19 @@ public class EditarLista extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(titulo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(62, 62, 62)
-                                .addComponent(jButton1))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(124, 124, 124)
+                        .addComponent(jButton1)))
                 .addGap(25, 25, 25))
         );
 
@@ -206,7 +220,7 @@ public class EditarLista extends javax.swing.JFrame {
     }//GEN-LAST:event_botonQuitarSeleccion1
 
     private void botonRegresar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRegresar
-        ListasDeReproduccion l = new ListasDeReproduccion(this.listasDeReproduccion, null);
+        ListasDeReproduccion l = new ListasDeReproduccion(this.listasDeReproduccion, this.lc);
         l.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_botonRegresar
@@ -226,7 +240,6 @@ public class EditarLista extends javax.swing.JFrame {
     String tituloLista;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

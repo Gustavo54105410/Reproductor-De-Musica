@@ -9,8 +9,11 @@ public class Cancion {
 
     public Cancion(String nombre){
         this.nombre = nombre;
+        this.artista = "";
+        this.album = "";
+        this.genero = "";
     }
-    
+
     public String getNombre() {
         return nombre;
     }

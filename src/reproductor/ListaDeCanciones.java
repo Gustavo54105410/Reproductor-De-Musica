@@ -6,10 +6,31 @@ public class ListaDeCanciones {
     private int size;
     int cont;
 
-    public void añadirCancion(String nombreCancion){
+    public void añadirCancion(Cancion cancion){
         Nodo nuevoNodo = new Nodo();
-        Cancion cancion = new Cancion(nombreCancion);
-        nuevoNodo.setDato(cancion);
+        Cancion cancionAux = cancion;
+    //Cancion cancion = new Cancion(nombreCancion);
+        nuevoNodo.setDato(cancionAux);
+        nodoAux = nodoInicial;
+        if(nodoAux == null){
+            nodoInicial = nuevoNodo;
+            nodoFinal = nuevoNodo;
+            size++;
+            System.out.println("SE AGREGO LA PRIMER CANCION");
+        }else{
+            System.out.println("SE AGREGO LA CANCION SIGUIENTE");
+            nuevoNodo.setAnterior(nodoFinal);
+            nodoFinal.setSiguiente(nuevoNodo);
+            nodoFinal = nuevoNodo;
+            size++;
+        }
+    }
+    
+    public void añadirCancionAListaDeReproduccion(String nombreCancion){
+        Nodo nuevoNodo = new Nodo();
+        Cancion cancionAux = new Cancion(nombreCancion);
+    //Cancion cancion = new Cancion(nombreCancion);
+        nuevoNodo.setDato(cancionAux);
         nodoAux = nodoInicial;
         if(nodoAux == null){
             nodoInicial = nuevoNodo;
@@ -59,7 +80,7 @@ public class ListaDeCanciones {
         return nodoAux.getDato();
     }
     
-    public Cancion buscarAleatoria(int dato){
+    public Cancion buscarPorId(int dato){
         nodoAux = nodoInicial;
         
         do{
@@ -75,30 +96,39 @@ public class ListaDeCanciones {
         return nodoAux.getDato();
     }
     
-    public String recorrerLista(){
+    public Cancion recorrerLista(){
         
         cont++;
         if(cont > getSize()){
             cont = 0;
+            //nodoAux = nodoInicial;
+            //return null;
+        }
+        if(nodoAux == nodoFinal){
+            nodoAux = null;
             return null;
         }
-        System.out.println("Aux: " + nodoAux.getDato().getNombre());
-        //System.out.println("Inicial: " + nodoInicial.getDato().getNombre());
+        
+        if(nodoAux != null){
+            System.out.println("Aux: " + nodoAux.getDato().getNombre());
+            System.out.println("Inicial: " + nodoInicial.getDato().getNombre());
+        }
         System.out.println("cont-------" + cont);
         if(nodoInicial != null && cont == 1){    // Se elimino del if ---> nodoAux == null && 
             nodoAux = nodoInicial;
-            System.out.println("PRIMER AGREGADO");
+           System.out.println("PRIMER AGREGADO");
             System.out.println("DEVUELTO: " + nodoAux.getDato().getNombre());
-            return nodoAux.getDato().getNombre();
+            return nodoAux.getDato();
         }else{
             if(nodoAux != null){
                 if(nodoAux.getSiguiente() != null){
                     System.out.println("SEGUNDO AGREGADO");
                     nodoAux = nodoAux.getSiguiente();
                     System.out.println("DEVUELTO: " + nodoAux.getDato().getNombre());
-                    return nodoAux.getDato().getNombre();
+                    return nodoAux.getDato();
                 }else{
                     System.out.println("NULO");
+                    //nodoAux = nodoInicial;
                     return null;
                 }
             }else{
@@ -107,6 +137,7 @@ public class ListaDeCanciones {
             }
         }
     }
+    
     
     public void listaTotal(){
         String texto = "";

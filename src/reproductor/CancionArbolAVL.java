@@ -118,8 +118,8 @@ public class CancionArbolAVL {
         return newPadre;                                                    // correctamente balanceado
     }
 //Metodo para insertar
-    public void Insertar(int d) {                                        
-        NodoCancionArbolAVL nn = new NodoCancionArbolAVL(d);                                
+    public void Insertar(NodoCancionArbolAVL nodo) {                                        
+        NodoCancionArbolAVL nn = nodo;                                
         if (raiz == null) {                                                     //Si la raiz es nula no había nodos
             raiz = nn;                                                            //insertaremos un nuevo nodo (nn)
         } else {                                                                  //En otro caso, solo asignamos la raiz para
