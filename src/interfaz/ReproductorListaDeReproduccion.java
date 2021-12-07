@@ -12,76 +12,71 @@ public class ReproductorListaDeReproduccion extends javax.swing.JFrame {
 
     public ReproductorListaDeReproduccion(String nombreLista, ArrayList<ListaDeReproduccion> listasDeReproduccion, ListaDeCanciones lc) {
         modeloListaDeReproduccion = new DefaultListModel();
-        
+
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-        
+
         player = new BasicPlayer();
-        
+
         this.listasDeReproduccion = listasDeReproduccion;
-        
+
         this.lc = lc;
-        
+
         for (int i = 0; i < listasDeReproduccion.size(); i++) {
             lrep = listasDeReproduccion.get(i);
-            if(nombreLista.equals(lrep.getNombreLista())){
+            if (nombreLista.equals(lrep.getNombreLista())) {
                 break;
             }
         }
-        
-        while(true){
+
+        while (true) {
             Cancion cancion = lrep.recorrerListaDeReproduccion();
-            if(cancion != null){
-                System.out.println("+++++++++++++++" + cancion.getNombre());
+            if (cancion != null) {
                 modeloListaDeReproduccion.addElement(cancion.getNombre());
-            }else{
+            } else {
                 break;
             }
         }
     }
 
-    public void reproducir(String cancionAReproducir){
-        System.out.println("CAnción Actual: " + cancionActual);
-        if(listaCanciones.getSelectedIndex() != -1){
-            try{
-                
-                if(!cancionActual.equals(listaCanciones.getSelectedValue())){
+    public void reproducir(String cancionAReproducir) {
+        if (listaCanciones.getSelectedIndex() != -1) {
+            try {
+                if (!cancionActual.equals(listaCanciones.getSelectedValue())) {
                     player.stop();
-                    System.out.println("STOP");
+                    System.out.println("CANCIÓN PARADA");
                 }
-            }catch(Exception e){
-                System.out.println("ERROR ZERO");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
- 
-            if(cancionAReproducir == null){
+
+            if (cancionAReproducir == null) {
                 aux = lrep.getCola().buscarCancion(listaCanciones.getSelectedValue()).getNombre();
-            }else{
+            } else {
                 aux = cancionAReproducir;
             }
 
-            try{          
-                System.out.println("Cancion antes de play: " + cancionActual);
-
-                if(player.getStatus() == BasicPlayer.PLAYING && cancionActual.equals(listaCanciones.getSelectedValue())){
+            try {
+                if (player.getStatus() == BasicPlayer.PLAYING && cancionActual.equals(listaCanciones.getSelectedValue())) {
                     player.pause();
-                    System.out.println("PAUSADA");
-                }else if(player.getStatus() != BasicPlayer.PLAYING && player.getStatus() != BasicPlayer.PAUSED){
+                    System.out.println("CANCIÓN PAUSADA");
+                } else if (player.getStatus() != BasicPlayer.PLAYING && player.getStatus() != BasicPlayer.PAUSED) {
                     player.open(new File("src/audio/" + aux + ".mp3"));
                     player.play();
                     cancionActual = aux;
                     System.out.println("REPRODUCIENDO");
-                }else if(player.getStatus() == BasicPlayer.PAUSED){
+                } else if (player.getStatus() == BasicPlayer.PAUSED) {
                     player.resume();
                     System.out.println("REPRODUCIENDO DE NUEVO");
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.out.print("ERROR --- ");
                 e.printStackTrace();
             }
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -94,6 +89,7 @@ public class ReproductorListaDeReproduccion extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -136,6 +132,8 @@ public class ReproductorListaDeReproduccion extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/audiocolores.gif"))); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -143,39 +141,47 @@ public class ReproductorListaDeReproduccion extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
+                        .addGap(26, 26, 26)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(50, 50, 50)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(39, 39, 39)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(184, 184, 184)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -198,13 +204,11 @@ public class ReproductorListaDeReproduccion extends javax.swing.JFrame {
 
     private void botonAvanzar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAvanzar
         listaCanciones.setSelectedIndex(listaCanciones.getSelectedIndex() + 1);
-        if(listaCanciones.getSelectedIndex() != -1){
-            //System.out.println("DEVUELVE: " + lc.avanzar());
+        if (listaCanciones.getSelectedIndex() != -1) {
             String x = lrep.getCola().avanzar();
-            if(!x.equals("final")){
-                System.out.println(x);
+            if (!x.equals("final")) {
                 reproducir(x);
-            }else{
+            } else {
                 System.out.println("Ya no hay canciones delante");
             }
         }
@@ -212,13 +216,11 @@ public class ReproductorListaDeReproduccion extends javax.swing.JFrame {
 
     private void botonRetroceder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRetroceder
         listaCanciones.setSelectedIndex(listaCanciones.getSelectedIndex() - 1);
-        if(listaCanciones.getSelectedIndex() != -1){
-            //System.out.println("DEVUELVE: " + lc.retroceder());
+        if (listaCanciones.getSelectedIndex() != -1) {
             String x = lrep.getCola().retroceder();
-            if(!x.equals("inicial")){
-                System.out.println(x);
+            if (!x.equals("inicial")) {
                 reproducir(x);
-            }else{
+            } else {
                 System.out.println("Ya no hay canciones atras");
             }
         }
@@ -245,6 +247,7 @@ public class ReproductorListaDeReproduccion extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> listaCanciones;

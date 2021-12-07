@@ -1,11 +1,6 @@
 package interfaz;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import java.beans.*;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,105 +9,85 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javazoom.jlgui.basicplayer.*;
 import reproductor.Cancion;
 import reproductor.CancionArbolAVL;
 import reproductor.ListaDeCanciones;
+import reproductor.ListaDeReproduccion;
 import reproductor.NodoCancionArbolAVL;
 
 public class Principal extends javax.swing.JFrame {
 
-    public Principal(Cancion c, Integer i, ListaDeCanciones lc) {
+    public Principal(Cancion c, Integer i, ListaDeCanciones lc, ArrayList<ListaDeReproduccion> listasDeReproduccion) {
         modeloListaCanciones = new DefaultListModel();
-
-        jPanel2 = new JPanel();
         
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
 
-        
-        System.out.println("-------PRINCIPAL---------");
         player = new BasicPlayer();
 
-        //this.numTotalLista = numTotalLista;
+        this.listasDeReproduccion = listasDeReproduccion;
 
         if (lc == null) {
             this.lc = new ListaDeCanciones();
         } else {
-            //this.lc = new ListaDeCanciones();
             this.lc = lc;
-            //lc.listaTotal();
         }
-        
-        
+
         cont = 0;
         arbol = new CancionArbolAVL();
-        /*if(lc != null){
-            lc.listaTotal();
-        }*/
-        if(lc == null){
+
+        if (lc == null) {
             BufferedReader br;
             try {
                 File file = new File("src/ficheros/Lista De Canciones.txt");
                 if (file.exists()) {
                     br = new BufferedReader(new FileReader(file));
                     while ((linea = br.readLine()) != null) {
-                        //if (lc == null) {
-                            cont++;
+                        cont++;
+                        modeloListaCanciones.addElement(cont + "." + linea);
+                        Cancion cancion = new Cancion(linea);
+                        this.lc.añadirCancion(cancion);
+                        cancion.setId(cont);
+                        cancion.setNombre(linea);
 
-                                    modeloListaCanciones.addElement(cont + "." + linea);
-                                    Cancion cancion = new Cancion(linea);
-                                    this.lc.añadirCancion(cancion);
-                                    //Cancion cancion = this.lc.buscarCancion(linea);
-                                    cancion.setId(cont);
-                                    cancion.setNombre(linea);
-
-                                    //System.out.println("--------" + cancion);
-
-                                    nodoArbol = new NodoCancionArbolAVL(cont);
-                                    nodoArbol.setSong(cancion);
-                                    arbol.Insertar(nodoArbol); 
+                        nodoArbol = new NodoCancionArbolAVL(cont);
+                        nodoArbol.setSong(cancion);
+                        arbol.Insertar(nodoArbol);
                     }
                 }
-
-                //numTotalLista = lc.getSize();
             } catch (Exception ex) {
                 Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else{
-            
+        } else {
             Cancion cancionAux;
-            System.out.println("+++++++++++++++++++++++++++++++++++++++++++");
-            do{
+            do {
                 cont++;
                 cancionAux = lc.recorrerLista();
-                
-                if(cancionAux != null){
-                    System.out.println("<<<<<<<<<<<<<" + cancionAux.getNombre());
+
+                if (cancionAux != null) {
                     modeloListaCanciones.addElement(cont + "." + cancionAux.getNombre());
                     nodoArbol = new NodoCancionArbolAVL(cont);
                     nodoArbol.setSong(cancionAux);
-                    arbol.Insertar(nodoArbol); 
+                    arbol.Insertar(nodoArbol);
                 }
-            }while(cancionAux != null);
-            System.out.println("+++++++++++++++++++++++++++++++++++++++++++");
+            } while (cancionAux != null);
         }
-        
+
+        /*
         arbol.InOrden(arbol.ObtenerRaiz());
         System.out.println("");
         arbol.PreOrden(arbol.ObtenerRaiz());
         System.out.println("");
         arbol.PostOrden(arbol.ObtenerRaiz());
+         */
     }
 
     @SuppressWarnings("unchecked")
@@ -138,6 +113,7 @@ public class Principal extends javax.swing.JFrame {
         generoCancion = new javax.swing.JLabel();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -217,7 +193,7 @@ public class Principal extends javax.swing.JFrame {
                 botonRetroceder(evt);
             }
         });
-        jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 230, 39, 39));
+        jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 39, 39));
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/play.png"))); // NOI18N
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -225,7 +201,7 @@ public class Principal extends javax.swing.JFrame {
                 botonReproducirYPausar(evt);
             }
         });
-        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 230, 39, 39));
+        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 260, 39, 39));
 
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/siguiente.png"))); // NOI18N
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -233,7 +209,7 @@ public class Principal extends javax.swing.JFrame {
                 botonAvanzar(evt);
             }
         });
-        jPanel2.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 230, 39, 39));
+        jPanel2.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 260, 39, 39));
 
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/stop.png"))); // NOI18N
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -241,7 +217,7 @@ public class Principal extends javax.swing.JFrame {
                 botonParar(evt);
             }
         });
-        jPanel2.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 280, 39, 39));
+        jPanel2.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 310, 39, 39));
 
         tituloCancion.setFont(new java.awt.Font("Kristen ITC", 1, 12)); // NOI18N
         tituloCancion.setForeground(new java.awt.Color(255, 255, 255));
@@ -286,7 +262,10 @@ public class Principal extends javax.swing.JFrame {
                 botonAleatorio(evt);
             }
         });
-        jPanel2.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 280, 39, 39));
+        jPanel2.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 310, 39, 39));
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/audiocolores.gif"))); // NOI18N
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 80, 130, 150));
 
         jTabbedPane1.addTab("Canciones", jPanel2);
 
@@ -307,70 +286,49 @@ public class Principal extends javax.swing.JFrame {
     private void botonModificarDatos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarDatos
         int aux;
         int opcion = 0;
-        
-        if(lcAux == null){
-            do{
-                try{
-                   opcion  = Integer.parseInt(JOptionPane.showInputDialog(rootPane, "Digite el número de la canción que desea modificar:"));
-                    if(opcion <= lc.getSize()){
-                        aux = 1;
-                    }else{
-                        aux =0;
-                    }
-                }catch(NumberFormatException e){
-                    JOptionPane.showMessageDialog(rootPane, "Dato incorrecto");
-                    aux = 0;
-                }
-            }while(aux == 0);
-            
-            NodoCancionArbolAVL nodoArbolAux = arbol.buscar(opcion, arbol.ObtenerRaiz());
-            System.out.println("");
-            System.out.println(arbol.buscar(opcion, arbol.ObtenerRaiz()).getSong().getId());
-            //System.out.println(nodoArbolAux.getSong().getId());
-            //System.out.println(nodoArbolAux.getSong().getNombre());
-            Cancion cancion = nodoArbolAux.getSong();
-            //System.out.println(cancion);
-            modificarDatosCancion m = new modificarDatosCancion(cancion, cancion.getId(), this.lc);
-            m.setVisible(true);
-            this.dispose();
-            
-        }else{
-            do{
-                try{
+
+        if (lcAux == null) {
+            do {
+                try {
                     opcion = Integer.parseInt(JOptionPane.showInputDialog(rootPane, "Digite el número de la canción que desea modificar:"));
-                    if(opcion <= lcAux.getSize()){
+                    if (opcion <= lc.getSize()) {
                         aux = 1;
-                    }else{
-                        aux =0;
+                    } else {
+                        aux = 0;
                     }
-                }catch(NumberFormatException e){
+                } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(rootPane, "Dato incorrecto");
                     aux = 0;
                 }
-            }while(aux == 0);
-            
+            } while (aux == 0);
+
             NodoCancionArbolAVL nodoArbolAux = arbol.buscar(opcion, arbol.ObtenerRaiz());
-            System.out.println("");
-            System.out.println(arbol.buscar(opcion, arbol.ObtenerRaiz()).getSong().getId());
-            //System.out.println(nodoArbolAux.getSong().getId());
-            //System.out.println(nodoArbolAux.getSong().getNombre());
             Cancion cancion = nodoArbolAux.getSong();
-            //System.out.println(cancion);
-            modificarDatosCancion m = new modificarDatosCancion(cancion, cancion.getId(), this.lcAux);
+            modificarDatosCancion m = new modificarDatosCancion(cancion, cancion.getId(), this.lc, this.listasDeReproduccion);
+            m.setVisible(true);
+            this.dispose();
+
+        } else {
+            do {
+                try {
+                    opcion = Integer.parseInt(JOptionPane.showInputDialog(rootPane, "Digite el número de la canción que desea modificar:"));
+                    if (opcion <= lcAux.getSize()) {
+                        aux = 1;
+                    } else {
+                        aux = 0;
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(rootPane, "Dato incorrecto");
+                    aux = 0;
+                }
+            } while (aux == 0);
+
+            NodoCancionArbolAVL nodoArbolAux2 = arbolAux.buscar(opcion, arbolAux.ObtenerRaiz());
+            Cancion cancion = nodoArbolAux2.getSong();
+            modificarDatosCancion m = new modificarDatosCancion(cancion, cancion.getId(), this.lcAux, this.listasDeReproduccion);
             m.setVisible(true);
             this.dispose();
         }
-        
-        
-        
-        /*if(lcAux == null){
-        modificarDatosCancion m = new modificarDatosCancion(listaCanciones.getSelectedValue(), lc);
-        m.setVisible(true);
-        }else{
-        modificarDatosCancion m = new modificarDatosCancion(listaCanciones.getSelectedValue(), lcAux);
-        m.setVisible(true);
-        }
-        this.dispose();*/
     }//GEN-LAST:event_botonModificarDatos
 
     private void botonParar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonParar
@@ -384,35 +342,30 @@ public class Principal extends javax.swing.JFrame {
     private void botonAvanzar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAvanzar
         listaCanciones.setSelectedIndex(listaCanciones.getSelectedIndex() + 1);
         if (listaCanciones.getSelectedIndex() != -1) {
-            //System.out.println("DEVUELVE: " + lc.avanzar());
-            
             String x;
-            if(lcAux == null){
+            if (lcAux == null) {
                 x = lc.avanzar();
                 if (!x.equals("final")) {
-                    System.out.println(x);
-                    reproducir(x, lc);             
+                    reproducir(x, lc);
                 } else {
                     System.out.println("Ya no hay canciones delante");
                 }
-            }else{
+            } else {
                 x = lcAux.avanzar();
                 if (!x.equals("final")) {
-                    System.out.println(x);
-                    reproducir(x, lcAux);             
+                    reproducir(x, lcAux);
                 } else {
                     System.out.println("Ya no hay canciones delante");
                 }
             }
         }
-
         mostrarDatosCancion();
     }//GEN-LAST:event_botonAvanzar
 
     private void botonReproducirYPausar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonReproducirYPausar
-        if(lcAux == null){
+        if (lcAux == null) {
             reproducir(null, lc);
-        }else{
+        } else {
             reproducir(null, lcAux);
         }
     }//GEN-LAST:event_botonReproducirYPausar
@@ -420,27 +373,23 @@ public class Principal extends javax.swing.JFrame {
     private void botonRetroceder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRetroceder
         listaCanciones.setSelectedIndex(listaCanciones.getSelectedIndex() - 1);
         if (listaCanciones.getSelectedIndex() != -1) {
-            //System.out.println("DEVUELVE: " + lc.retroceder());
             String x;
-            if(lcAux == null){
+            if (lcAux == null) {
                 x = lc.retroceder();
                 if (!x.equals("inicial")) {
-                    System.out.println(x);
                     reproducir(x, lc);
                 } else {
                     System.out.println("Ya no hay canciones atras");
                 }
-            }else{
+            } else {
                 x = lcAux.retroceder();
                 if (!x.equals("inicial")) {
-                    System.out.println(x);
                     reproducir(x, lcAux);
                 } else {
                     System.out.println("Ya no hay canciones atras");
                 }
             }
         }
-
         mostrarDatosCancion();
     }//GEN-LAST:event_botonRetroceder
 
@@ -449,24 +398,22 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_listaCancionesMouseClicked
 
     private void botonIrAListasDeReproduccion(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIrAListasDeReproduccion
-        ListasDeReproduccion lr = new ListasDeReproduccion(null, this.lc);
+        ListasDeReproduccion lr = new ListasDeReproduccion(this.listasDeReproduccion, this.lc);
         lr.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_botonIrAListasDeReproduccion
 
     private void botonAgregarCancion(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgregarCancion
         cont++;
-        
+
         JFileChooser archivo = new JFileChooser("E:\\UPITTA\\3er Semestre\\Estructura De Datos\\ProyectoFinal");
         archivo.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Audios mp3", "mp3");
-        //archivo.addChoosableFileFilter(filter);
         archivo.setFileFilter(filter);
         archivo.showOpenDialog(rootPane);
         String file = archivo.getSelectedFile().getAbsolutePath();
         nombre = archivo.getName(archivo.getSelectedFile()).replace(".mp3", "");
         modeloListaCanciones.addElement(cont + "." + nombre);
-        //System.out.println(nombre);
 
         int contador = 0;
 
@@ -501,30 +448,27 @@ public class Principal extends javax.swing.JFrame {
                     break;
                 }
             }
+            
             Cancion cancion = new Cancion(nombre);
             cancion.setId(cont);
             lc.añadirCancion(cancion);
-            //Cancion cancion2 = this.lc.buscarCancion(nombre);
-            
-            
+
             nodoArbol = new NodoCancionArbolAVL(cont);
             nodoArbol.setSong(cancion);
             arbol.Insertar(nodoArbol);
-            
+            /*
             arbol.InOrden(arbol.ObtenerRaiz());
             System.out.println("");
             arbol.PreOrden(arbol.ObtenerRaiz());
             System.out.println("");
             arbol.PostOrden(arbol.ObtenerRaiz());
-            
+             */
             bw.write(nombre + "\n");
             fis.close();
             bw.close();
         } catch (IOException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        System.out.println(contador);
 
         try {
             FileOutputStream fos = new FileOutputStream("src/audio/" + nombre + ".mp3");
@@ -535,97 +479,88 @@ public class Principal extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         JOptionPane.showMessageDialog(rootPane, "CANCIÓN AGREGADA CON EXITO");
     }//GEN-LAST:event_botonAgregarCancion
 
     private void botonAleatorio(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAleatorio
         Random r = new Random();
         int aleatorios[] = new int[lc.getSize()];
-        
-        while(true){
-           int random = r.nextInt(lc.getSize() + 1); 
-           if(aleatorios[lc.getSize()-1] == 0){
-                if(random != 0){
-                     for (int i = 0; i < lc.getSize(); i++) {
-                         if(random == aleatorios[i]){
-                             break;
-                         }
-                         if(aleatorios[i] == 0){
-                             aleatorios[i] = random;
-                             break;
-                         }
-                     }
+
+        while (true) {
+            int random = r.nextInt(lc.getSize() + 1);
+            if (aleatorios[lc.getSize() - 1] == 0) {
+                if (random != 0) {
+                    for (int i = 0; i < lc.getSize(); i++) {
+                        if (random == aleatorios[i]) {
+                            break;
+                        }
+                        if (aleatorios[i] == 0) {
+                            aleatorios[i] = random;
+                            break;
+                        }
+                    }
                 }
-           }else{
-               break;
-           }
+            } else {
+                break;
+            }
         }
-        
-        for (int i = 0; i < lc.getSize(); i++) {
-            System.out.print(aleatorios[i] + " ");
-        }
-        
+
         modeloListaCanciones.clear();
         lcAux = new ListaDeCanciones();
-        
+        arbolAux = new CancionArbolAVL();
+
         int cont = 0;
-        
+
         for (int i = 0; i < aleatorios.length; i++) {
             cont++;
             Cancion cancion = lc.buscarPorId(aleatorios[i]);
             lcAux.añadirCancion(cancion);
+            nodoArbolAux = new NodoCancionArbolAVL(i + 1);
+            nodoArbolAux.setSong(cancion);
+            arbolAux.Insertar(nodoArbolAux);
             modeloListaCanciones.addElement(cont + "." + cancion.getNombre());
         }
-        
     }//GEN-LAST:event_botonAleatorio
 
-    public void reproducir(String cancionAReproducir, ListaDeCanciones tipoLista){
-        
+    public void reproducir(String cancionAReproducir, ListaDeCanciones tipoLista) {
         int start;
-
         try {
             int num = Integer.parseInt(listaCanciones.getSelectedValue().substring(0, 2));
             start = 3;
         } catch (NumberFormatException e) {
             start = 2;
         }
-        
-        System.out.println("CAnción Actual: " + cancionActual);
-        if(listaCanciones.getSelectedIndex() != -1){
-            try{
-                
-                if(!cancionActual.equals(listaCanciones.getSelectedValue().substring(start))){
+
+        if (listaCanciones.getSelectedIndex() != -1) {
+            try {
+                if (!cancionActual.equals(listaCanciones.getSelectedValue().substring(start))) {
                     player.stop();
-                    System.out.println("STOP");
+                    System.out.println("CANCIÓN PARADA");
                 }
-            }catch(Exception e){
-                System.out.println("ERROR ZERO");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
- 
-            if(cancionAReproducir == null){
+
+            if (cancionAReproducir == null) {
                 aux = tipoLista.buscarCancion(listaCanciones.getSelectedValue().substring(start)).getNombre();
-            }else{
+            } else {
                 aux = cancionAReproducir;
             }
 
-            try{          
-                System.out.println("Cancion antes de play: " + cancionActual);
-
-                if(player.getStatus() == BasicPlayer.PLAYING && cancionActual.equals(listaCanciones.getSelectedValue().substring(start))){
+            try {
+                if (player.getStatus() == BasicPlayer.PLAYING && cancionActual.equals(listaCanciones.getSelectedValue().substring(start))) {
                     player.pause();
-                    System.out.println("PAUSADA");
-                }else if(player.getStatus() != BasicPlayer.PLAYING && player.getStatus() != BasicPlayer.PAUSED){
+                    System.out.println("CANCIÓN PAUSADA");
+                } else if (player.getStatus() != BasicPlayer.PLAYING && player.getStatus() != BasicPlayer.PAUSED) {
                     player.open(new File("src/audio/" + aux + ".mp3"));
                     player.play();
                     cancionActual = aux;
                     System.out.println("REPRODUCIENDO");
-                }else if(player.getStatus() == BasicPlayer.PAUSED){
+                } else if (player.getStatus() == BasicPlayer.PAUSED) {
                     player.resume();
                     System.out.println("REPRODUCIENDO DE NUEVO");
                 }
-            }catch(Exception e){
-                System.out.print("ERROR --- ");
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -633,7 +568,6 @@ public class Principal extends javax.swing.JFrame {
 
     private void mostrarDatosCancion() {
         int start;
-
         try {
             int num = Integer.parseInt(listaCanciones.getSelectedValue().substring(0, 2));
             start = 3;
@@ -692,7 +626,7 @@ public class Principal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Principal(null, null, null).setVisible(true);
+                new Principal(null, null, null, null).setVisible(true);
             }
         });
     }
@@ -704,19 +638,20 @@ public class Principal extends javax.swing.JFrame {
     int numTotalLista;
     HashMap map;
     public BasicPlayer player;
-    //ArrayList<ListaReproduccion> listasDeReproduccion;
+    ArrayList<ListaDeReproduccion> listasDeReproduccion;
     String nombre;
     boolean done;
     String nombreLista;
     String linea, cancionActual = "";
     ListaDeCanciones lc;
     ListaDeCanciones lcAux;
-    //ListaReproduccion lrep;
     String aux;
     int cont;
     NodoCancionArbolAVL nodoArbol;
     CancionArbolAVL arbol;
-    
+    NodoCancionArbolAVL nodoArbolAux;
+    CancionArbolAVL arbolAux;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel albumCancion;
     private javax.swing.JLabel artistaCancion;
@@ -731,6 +666,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

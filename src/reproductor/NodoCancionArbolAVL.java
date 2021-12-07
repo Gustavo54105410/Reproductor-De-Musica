@@ -12,7 +12,7 @@ public class NodoCancionArbolAVL {
         this.fe = 0;
         this.HIzq = null;
         this.Hder = null;
-    }
+    } 
 
     public Cancion getSong() {
         return song;
@@ -39,7 +39,7 @@ public class NodoCancionArbolAVL {
     }
 
     public int getDato() {
-        return dato;
+        return song.getId();
     }
 
     public int getFe() {

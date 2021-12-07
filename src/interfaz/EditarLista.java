@@ -1,17 +1,13 @@
 package interfaz;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import reproductor.Cancion;
-import reproductor.CancionArbolAVL;
 import reproductor.ListaDeCanciones;
 import reproductor.ListaDeReproduccion;
-import reproductor.NodoCancionArbolAVL;
 
 public class EditarLista extends javax.swing.JFrame {
 
@@ -21,60 +17,40 @@ public class EditarLista extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-        
+
         this.tituloLista = nombreLista;
         titulo.setText("Mi lista:" + nombreLista);
-        //lc = new ListaDeCanciones();
         this.lc = listaDeCanciones;
-        //this.lc = listaDeCanciones;
-        lc.listaTotal();
-        
-        
-        
+
         int cont = 0;
-        
+
         BufferedReader br;
         try {
-            //File file = new File("src/ficheros/Lista De Canciones.txt");
-            //if(file.exists()){
-                //br = new BufferedReader(new FileReader(file));
-                //while((linea = br.readLine()) != null){
-                Cancion cancion;
-                do{
-                    cont++;
-                    //Cancion cancion = lc.buscarCancion(linea);
-                    cancion = lc.recorrerLista();
-                    if(cancion != null){
-                        modeloMisCanciones.addElement(cancion.getNombre());
-                    }
-                }while(cancion != null);
-            //}
-            /*
-            String aux;
-            do{
-                aux = lc.recorrerLista();
-                System.out.println("AÑADIENDO AL OTRO: " + aux);
-                modeloMisCanciones.addElement(aux);
-            }while(aux != null);*/
+            Cancion cancion;
+            do {
+                cont++;
+                cancion = lc.recorrerLista();
+                if (cancion != null) {
+                    modeloMisCanciones.addElement(cancion.getNombre());
+                }
+            } while (cancion != null);
         } catch (Exception ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         this.listasDeReproduccion = new ArrayList<>();
         this.listasDeReproduccion = listasDeReproduccion;
-        for(int i = 0; i < this.listasDeReproduccion.size(); i++){
+        for (int i = 0; i < this.listasDeReproduccion.size(); i++) {
             lrep = this.listasDeReproduccion.get(i);
-            if(nombreLista.equals(lrep.getNombreLista())){
+            if (nombreLista.equals(lrep.getNombreLista())) {
                 break;
             }
         }
-        System.out.println("Tamaño: " + lrep.getSize());
-        while(true){
+        while (true) {
             Cancion cancion = lrep.recorrerListaDeReproduccion();
-            if(cancion != null){
-                System.out.println("+++++++++++++++" + cancion.getNombre());
+            if (cancion != null) {
                 modeloMiListaDeReproduccion.addElement(cancion.getNombre());
-            }else{
+            } else {
                 break;
             }
         }
@@ -206,15 +182,15 @@ public class EditarLista extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void agregarCancionAListaDeReproduccion(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarCancionAListaDeReproduccion
-        if(misCanciones.getSelectedIndex() != -1){
+        if (misCanciones.getSelectedIndex() != -1) {
             modeloMiListaDeReproduccion.addElement(misCanciones.getSelectedValue());
-            
+
             lrep.añadirAListaDeReproduccion(misCanciones.getSelectedValue());
         }
     }//GEN-LAST:event_agregarCancionAListaDeReproduccion
 
     private void botonQuitarSeleccion1(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonQuitarSeleccion1
-        if(miLista.isSelectedIndex(miLista.getSelectedIndex())){
+        if (miLista.isSelectedIndex(miLista.getSelectedIndex())) {
             miLista.clearSelection();
         }
     }//GEN-LAST:event_botonQuitarSeleccion1
@@ -226,7 +202,7 @@ public class EditarLista extends javax.swing.JFrame {
     }//GEN-LAST:event_botonRegresar
 
     private void botonQuitarSeleccion2(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonQuitarSeleccion2
-        if(misCanciones.isSelectedIndex(misCanciones.getSelectedIndex())){
+        if (misCanciones.isSelectedIndex(misCanciones.getSelectedIndex())) {
             misCanciones.clearSelection();
         }
     }//GEN-LAST:event_botonQuitarSeleccion2
@@ -236,7 +212,6 @@ public class EditarLista extends javax.swing.JFrame {
     ArrayList<ListaDeReproduccion> listasDeReproduccion;
     ListaDeCanciones lc;
     ListaDeReproduccion lrep;
-    String linea = "";
     String tituloLista;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
